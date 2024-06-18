@@ -101,6 +101,16 @@ type InfiniBandHwCounters struct {
 	RxIcrcEncapsulated      *uint64 // hw_counters/rx_icrc_encapsulated
 	RxReadRequests          *uint64 // hw_counters/rx_read_requests
 	RxWriteRequests         *uint64 // hw_counters/rx_write_requests
+	RxRoceDiscards			*uint64 // hw_counters/rx_roce_discards
+	RxRoceErrors  	      	*uint64 // hw_counters/rx_roce_errors
+	RxRoceGoodBytes     	*uint64 // hw_counters/rx_roce_good_bytes
+	RxRoceGoodPkts      	*uint64 // hw_counters/rx_roce_good_pkts
+	RxRoceOnlyBytes     	*uint64 // hw_counters/rx_roce_only_bytes
+	RxRoceOnlyPkts      	*uint64 // hw_counters/rx_roce_only_pkts
+	TxRoceDiscards      	*uint64 // hw_counters/tx_roce_discards
+	TxRoceErrors        	*uint64 // hw_counters/tx_roce_errors
+	TxRoceOnlyBytes     	*uint64 // hw_counters/tx_roce_only_bytes
+	TxRoceOnlyPkts      	*uint64 // hw_cunters/tx_roce_only_pkts
 }
 
 // InfiniBandPort contains info from files in
@@ -553,6 +563,26 @@ func parseInfiniBandHwCounters(portPath string) (*InfiniBandHwCounters, error) {
 			hwCounters.RxReadRequests = vp.PUInt64()
 		case "rx_write_requests":
 			hwCounters.RxWriteRequests = vp.PUInt64()
+		case "rx_roce_discards":
+			hwCounters.RxRoceDiscards = vp.PUInt64()
+		case "rx_roce_errors":
+			hwCounters.RxRoceErrors = vp.PUInt64()
+		case "rx_roce_good_bytes":
+			hwCounters.RxRoceGoodBytes = vp.PUInt64()
+		case "rx_roce_good_pkt":
+			hwCounters.RxRoceGoodPkts = vp.PUInt64()
+		case "rx_roce_only_bytes":
+			hwCounters.RxRoceOnlyBytes = vp.PUInt64()
+		case "tx_roce_discards":
+			hwCounters.RxRoceOnlyPkts = vp.PUInt64()
+		case "tx_roce_discards":
+			hwCounters.TxRoceDiscards = vp.PUInt64()
+		case "tx_roce_errors":
+			hwCounters.TxRoceErrors = vp.PUInt64()
+		case "tx_roce_only_bytes":
+			hwCounters.TxRoceOnlyBytes = vp.PUInt64()
+		case "tx_roce_only_pkts":
+			hwCounters.TxRoceOnlyPkts = vp.PUInt64()
 		}
 
 		if err := vp.Err(); err != nil {
