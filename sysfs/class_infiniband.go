@@ -573,7 +573,7 @@ func parseInfiniBandHwCounters(portPath string) (*InfiniBandHwCounters, error) {
 			hwCounters.RxRoceGoodPkts = vp.PUInt64()
 		case "rx_roce_only_bytes":
 			hwCounters.RxRoceOnlyBytes = vp.PUInt64()
-		case "tx_roce_discards":
+		case "rx_roce_only_pkts":
 			hwCounters.RxRoceOnlyPkts = vp.PUInt64()
 		case "tx_roce_discards":
 			hwCounters.TxRoceDiscards = vp.PUInt64()
