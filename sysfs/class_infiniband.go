@@ -101,16 +101,16 @@ type InfiniBandHwCounters struct {
 	RxIcrcEncapsulated      *uint64 // hw_counters/rx_icrc_encapsulated
 	RxReadRequests          *uint64 // hw_counters/rx_read_requests
 	RxWriteRequests         *uint64 // hw_counters/rx_write_requests
-	RxRoceDiscards			*uint64 // hw_counters/rx_roce_discards
-	RxRoceErrors  	      	*uint64 // hw_counters/rx_roce_errors
-	RxRoceGoodBytes     	*uint64 // hw_counters/rx_roce_good_bytes
-	RxRoceGoodPkts      	*uint64 // hw_counters/rx_roce_good_pkts
-	RxRoceOnlyBytes     	*uint64 // hw_counters/rx_roce_only_bytes
-	RxRoceOnlyPkts      	*uint64 // hw_counters/rx_roce_only_pkts
-	TxRoceDiscards      	*uint64 // hw_counters/tx_roce_discards
-	TxRoceErrors        	*uint64 // hw_counters/tx_roce_errors
-	TxRoceOnlyBytes     	*uint64 // hw_counters/tx_roce_only_bytes
-	TxRoceOnlyPkts      	*uint64 // hw_cunters/tx_roce_only_pkts
+	RxRoceDiscards          *uint64 // hw_counters/rx_roce_discards
+	RxRoceErrors            *uint64 // hw_counters/rx_roce_errors
+	RxRoceGoodBytes         *uint64 // hw_counters/rx_roce_good_bytes
+	RxRoceGoodPkts          *uint64 // hw_counters/rx_roce_good_pkts
+	RxRoceOnlyBytes         *uint64 // hw_counters/rx_roce_only_bytes
+	RxRoceOnlyPkts          *uint64 // hw_counters/rx_roce_only_pkts
+	TxRoceDiscards          *uint64 // hw_counters/tx_roce_discards
+	TxRoceErrors            *uint64 // hw_counters/tx_roce_errors
+	TxRoceOnlyBytes         *uint64 // hw_counters/tx_roce_only_bytes
+	TxRoceOnlyPkts          *uint64 // hw_cunters/tx_roce_only_pkts
 }
 
 // InfiniBandPort contains info from files in
