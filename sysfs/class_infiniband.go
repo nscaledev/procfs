@@ -280,7 +280,7 @@ func (fs FS) parseInfiniBandPort(name string, port string) (*InfiniBandPort, err
 	}
 
 	// Intel irdma module does not expose /sys/class/infiniband/<device>/ports/<port-num>/counters
-	// Broadcom bnxt_re module exposes /sys/class/infiniband/<device>/ports/<port-num>/counters but 
+	// Broadcom bnxt_re module exposes /sys/class/infiniband/<device>/ports/<port-num>/counters but
 	// returns "Invalid argument" for all
 	if !strings.HasPrefix(ibp.Name, "irdma") || !strings.HasPrefix(ibp.Name, "bnxt_re") {
 		counters, err := parseInfiniBandCounters(portPath)
