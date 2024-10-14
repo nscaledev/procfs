@@ -18,6 +18,7 @@ package sysfs
 
 import (
 	"errors"
+	"os"
 	"reflect"
 	"testing"
 )
@@ -63,6 +64,34 @@ func TestCPUTopology(t *testing.T) {
 	}
 }
 
+func TestCPUOnline(t *testing.T) {
+	fs, err := NewFS(sysTestFixtures)
+	if err != nil {
+		t.Fatal(err)
+	}
+	cpus, err := fs.CPUs()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want, have := 3, len(cpus); want != have {
+		t.Errorf("incorrect number of CPUs, have %v, want %v", want, have)
+	}
+	cpu0Online, err := cpus[0].Online()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want, have := true, cpu0Online; want != have {
+		t.Errorf("incorrect online status, have %v, want %v", want, have)
+	}
+	cpu1Online, err := cpus[1].Online()
+	if err != nil && !errors.Is(err, os.ErrNotExist) {
+		t.Fatal(err)
+	}
+	if want, have := false, cpu1Online; want != have {
+		t.Errorf("incorrect online status, have %v, want %v", want, have)
+	}
+}
+
 func TestCPUThermalThrottle(t *testing.T) {
 	fs, err := NewFS(sysTestFixtures)
 	if err != nil {
@@ -104,23 +133,38 @@ func TestSystemCpufreq(t *testing.T) {
 	}
 
 	systemCpufreq := []SystemCPUCpufreqStats{
-		// Has missing `cpuinfo_cur_freq` file.
+		// The following files are missing for the first CPU:
+		// * `cpuinfo_cur_freq`
+		// * `time_in_state`
+		// * `total_trans`
 		{
-			Name:                     "0",
-			CpuinfoCurrentFrequency:  nil,
-			CpuinfoMinimumFrequency:  makeUint64(800000),
-			CpuinfoMaximumFrequency:  makeUint64(2400000),
-			CpuinfoTransitionLatency: makeUint64(0),
-			ScalingCurrentFrequency:  makeUint64(1219917),
-			ScalingMinimumFrequency:  makeUint64(800000),
-			ScalingMaximumFrequency:  makeUint64(2400000),
-			AvailableGovernors:       "performance powersave",
-			Driver:                   "intel_pstate",
-			Governor:                 "powersave",
-			RelatedCpus:              "0",
-			SetSpeed:                 "<unsupported>",
+			Name:                             "0",
+			CpuinfoCurrentFrequency:          nil,
+			CpuinfoMinimumFrequency:          makeUint64(800000),
+			CpuinfoMaximumFrequency:          makeUint64(2400000),
+			CpuinfoTransitionLatency:         makeUint64(0),
+			ScalingCurrentFrequency:          makeUint64(1219917),
+			ScalingMinimumFrequency:          makeUint64(800000),
+			ScalingMaximumFrequency:          makeUint64(2400000),
+			AvailableGovernors:               "performance powersave",
+			Driver:                           "intel_pstate",
+			Governor:                         "powersave",
+			RelatedCpus:                      "0",
+			SetSpeed:                         "<unsupported>",
+			CpuinfoFrequencyDuration:         nil,
+			CpuinfoFrequencyTransitionsTotal: nil,
+			CpuinfoTransitionTable: &[][]uint64{
+				{0, 3600000, 3400000, 3200000, 3000000, 2800000},
+				{3600000, 0, 5, 0, 0, 0},
+				{3400000, 4, 0, 2, 0, 0},
+				{3200000, 0, 1, 0, 2, 0},
+				{3000000, 0, 0, 1, 0, 3},
+				{2800000, 0, 0, 0, 2, 0},
+			},
 		},
-		// Has missing `scaling_cur_freq` file.
+		// The following files are missing for the second CPU:
+		// * `scaling_cur_freq`
+		// * `trans_table`
 		{
 			Name:                     "1",
 			CpuinfoCurrentFrequency:  makeUint64(1200195),
@@ -135,6 +179,15 @@ func TestSystemCpufreq(t *testing.T) {
 			Governor:                 "powersave",
 			RelatedCpus:              "1",
 			SetSpeed:                 "<unsupported>",
+			CpuinfoFrequencyDuration: &map[uint64]uint64{
+				3600000: 2089,
+				3400000: 136,
+				3200000: 34,
+				3000000: 67,
+				2800000: 172488,
+			},
+			CpuinfoFrequencyTransitionsTotal: makeUint64(20),
+			CpuinfoTransitionTable:           nil,
 		},
 	}
 

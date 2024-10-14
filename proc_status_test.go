@@ -103,8 +103,8 @@ func TestProcStatusUIDs(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if want, have := [4]string{"1000", "1000", "1000", "0"}, s.UIDs; want != have {
-		t.Errorf("want uids %s, have %s", want, have)
+	if want, have := [4]uint64{1000, 1000, 1000, 0}, s.UIDs; want != have {
+		t.Errorf("want uids %v, have %v", want, have)
 	}
 }
 
@@ -119,8 +119,8 @@ func TestProcStatusGIDs(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if want, have := [4]string{"1001", "1001", "1001", "0"}, s.GIDs; want != have {
-		t.Errorf("want uids %s, have %s", want, have)
+	if want, have := [4]uint64{1001, 1001, 1001, 0}, s.GIDs; want != have {
+		t.Errorf("want gids %v, have %v", want, have)
 	}
 }
 
@@ -137,5 +137,21 @@ func TestCpusAllowedList(t *testing.T) {
 
 	if want, have := []uint64{0, 1, 2, 3, 4, 5, 6, 7}, s.CpusAllowedList; !reflect.DeepEqual(want, have) {
 		t.Errorf("want CpusAllowedList %v, have %v", want, have)
+	}
+}
+
+func TestNsPids(t *testing.T) {
+	p, err := getProcFixtures(t).Proc(26235)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	s, err := p.NewStatus()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want, have := []uint64{26235, 1}, s.NSpids; !reflect.DeepEqual(want, have) {
+		t.Errorf("want NsPids %v, have %v", want, have)
 	}
 }
